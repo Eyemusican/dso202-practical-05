@@ -1,0 +1,25 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+
+namespace: webapp-prod
+
+labels:
+  - pairs:
+      environment: prod
+    includeSelectors: false
+
+replicas:
+  - name: webapp
+    count: 3
+
+configMapGenerator:
+  - name: web-content
+    behavior: replace
+    files:
+      - index.html
+
+patches:
+  - path: patch-resources.yaml
